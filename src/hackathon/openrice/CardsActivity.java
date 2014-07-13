@@ -147,11 +147,19 @@ public final class CardsActivity extends Activity {
 	                lat = Double.parseDouble(jsonObj.getString("x"));
 	                lon = Double.parseDouble(jsonObj.getString("y"));
 	                String mapUrl = getMapUrl(lat, lon, x, y, 240, 320);
+	                String bottomNote;
+	                String score = jsonObj.getString("score");
 	                int meters = (int) Math.round(1000*jsonObj.getDouble("distance"));
+	                if (score.equalsIgnoreCase("null")) {
+	                	bottomNote = meters + " meters away";
+	                } else {
+	                	bottomNote = meters + " meters away, ★" + score;
+	                }
+
 		            cards.add(getImagesCard(ctx, (String) jsonObj.get("img"), mapUrl)
 		                    .setImageLayout(ImageLayout.FULL)
-		                    .setText(new String(jsonObj.getString("name").getBytes("ISO-8859-1"), "UTF-8"))
-		                    .setFootnote(meters + " meters away")); //+ "\n" + (String) jsonObj.get("address")));	
+		                    .setText(new String((jsonObj.getString("name").trim() + "\n" + jsonObj.getString("address").trim()).getBytes("ISO-8859-1"), "UTF-8"))
+		                    .setFootnote(bottomNote));
 	            }
 	        } catch (Exception e) {
 	            this.exception = e;
@@ -277,7 +285,11 @@ public final class CardsActivity extends Activity {
 			            	final HashMap<String, String> poiInformation = new HashMap<String, String>();
 							poiInformation.put(ATTR_ID, String.valueOf(i));
 							poiInformation.put(ATTR_NAME, new String(jsonObj.getString("name").getBytes("ISO-8859-1"), "UTF-8"));
-							poiInformation.put(ATTR_DESCRIPTION, jsonObj.getDouble("distance") + "km away");
+							if (jsonObj.getString("score").equalsIgnoreCase("null")) {
+								poiInformation.put(ATTR_DESCRIPTION, new String(jsonObj.getString("address").getBytes("ISO-8859-1"), "UTF-8"));
+							} else {
+								poiInformation.put(ATTR_DESCRIPTION, "★" + jsonObj.getDouble("score") + ", " + new String(jsonObj.getString("address").getBytes("ISO-8859-1"), "UTF-8"));
+							}
 							poiInformation.put(ATTR_LATITUDE, String.valueOf(jsonObj.get("x")));
 							poiInformation.put(ATTR_LONGITUDE, String.valueOf(jsonObj.get("y")));
 							final float UNKNOWN_ALTITUDE = -32768f;  // equals "AR.CONST.UNKNOWN_ALTITUDE" in JavaScript (compare AR.GeoLocation specification)
@@ -353,50 +365,14 @@ public final class CardsActivity extends Activity {
     private Card getImagesCard(Context context, String... urls) {
         Card card = new Card(context);
         for (String url : urls) {
-	        Bitmap image = getBitmapFromURL(url);
-	        if (image != null) {
-	        	card.addImage(image);
-	        }
-        }
-        /*String stars;
-        switch (rating) {
-        case 0: stars = "http://i616.photobucket.com/albums/tt248/lindanmc/starrating-halfstar.jpg";
-        	break;
-        case 1: stars = "http://i616.photobucket.com/albums/tt248/lindanmc/starrating-1star.jpg";
-        	break;
-        case 2: stars = "http://i616.photobucket.com/albums/tt248/lindanmc/starrating-2star.jpg";
-    	break;        	
-        case 3: stars = "http://i616.photobucket.com/albums/tt248/lindanmc/starrating-3star.jpg";
-    	break; 
-        case 4: stars = "http://i616.photobucket.com/albums/tt248/lindanmc/starrating-4star.jpg";
-    	break;        	    	    	
-        case 5: stars = "http://i616.photobucket.com/albums/tt248/lindanmc/starrating-5star.jpg";
-    	break;        	    	    	
-    	default: stars = "http://i616.photobucket.com/albums/tt248/lindanmc/starrating-halfstar.jpg";
-        }
-        Bitmap rate = getBitmapFromURL(stars);
-        if (rate != null) {
-        	card.addImage(rate);
-        	
+        	if (!url.equalsIgnoreCase("/images/v4/previewimg/NoAvatar_restaurant.png")) {
+		        Bitmap image = getBitmapFromURL(url);
+		        if (image != null) {
+		        	card.addImage(image);
+		        }
+        	}
         }
 
-        	
-        	http://i984.photobucket.com/albums/ae328/hobster70/Stars/starrating-halfstar.jpg
-        	http://i984.photobucket.com/albums/ae328/hobster70/Stars/starrating-1star.jpg
-        	http://i984.photobucket.com/albums/ae328/hobster70/Stars/starrating-2stars.jpg
-        	http://i984.photobucket.com/albums/ae328/hobster70/Stars/starrating-2andahalfstars.jpg
-        	http://i984.photobucket.com/albums/ae328/hobster70/Stars/starrating-3stars.jpg
-        	http://i984.photobucket.com/albums/ae328/hobster70/Stars/starrating-3andahalfstars.jpg
-        	http://i984.photobucket.com/albums/ae328/hobster70/Stars/starrating-4stars.jpg
-        	http://i984.photobucket.com/albums/ae328/hobster70/Stars/starrating-4andahalfstars.jpg
-        	http://i984.photobucket.com/albums/ae328/hobster70/Stars/starrating-5stars.jpg
-        	*/
-        
-        /*card.addImage(R.drawable.codemonkey1);
-        card.addImage(R.drawable.codemonkey2);
-        card.addImage(R.drawable.codemonkey3);
-        card.addImage(R.drawable.codemonkey4);
-        card.addImage(R.drawable.codemonkey5);*/
         return card;
     }
 
