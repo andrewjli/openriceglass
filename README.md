@@ -1,10 +1,11 @@
 # OpenRice Glass
 
-This is an augmented reality application for Google Glass, written at the
-Codeaholics July 2014 Hackathon for Wearables in less than 48 hours. It is an
-Augmented Reality glassware that allows users to query for nearby restaurants,
-pulling data from Hong Kong's [OpenRice](http://www.openrice.com/english/), and
-displays a point of interest marker for a selected restaurant in an AR overlay
+This is an augmented reality application for Google Glass, written primarily by
+[@tomtau](https://github.com/tomtau), with input from [@andrewjli](https://github.com/andrewjli)
+at the Codeaholics July 2014 Hackathon for Wearables in less than 48 hours. It
+is an Augmented Reality glassware that allows users to query for nearby restaurants,
+pulling data from Hong Kong's [OpenRice](http://www.openrice.com/english/),
+and displays a point of interest marker for a selected restaurant in an AR overlay
 to guide users to the location of the restaurant. It is based off the [Wikitude Glass SDK](http://www.wikitude.com/products/eyewear/google-glass-augmented-reality-sdk/).
 
 This piece of glassware was built alongside [andrewjli/openricescraper](https://github.com/andrewjli/openricescraper)
