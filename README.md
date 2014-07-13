@@ -21,6 +21,7 @@ built with the Android SDK, Glass Development Kit (GDK) and the Wikitude Glass S
 
 ## Usage
 There are two ways to start the app after it is installed onto your Glass:
+
 1. On the home screen, say "ok, glass" and then say "Explore nearby"; or
 2. On the home screen, tap the touch pad, then tap "Explore".
 
