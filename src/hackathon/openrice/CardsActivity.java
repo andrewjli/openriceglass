@@ -147,9 +147,11 @@ public final class CardsActivity extends Activity {
 	                lat = Double.parseDouble(jsonObj.getString("x"));
 	                lon = Double.parseDouble(jsonObj.getString("y"));
 	                String mapUrl = getMapUrl(lat, lon, x, y, 240, 320);
+	                int meters = (int) Math.round(1000*jsonObj.getDouble("distance"));
 		            cards.add(getImagesCard(ctx, (String) jsonObj.get("img"), mapUrl)
 		                    .setImageLayout(ImageLayout.FULL)
-		                    .setText(new String(jsonObj.getString("name").getBytes("ISO-8859-1"), "UTF-8"))); //+ "\n" + (String) jsonObj.get("address")));	
+		                    .setText(new String(jsonObj.getString("name").getBytes("ISO-8859-1"), "UTF-8"))
+		                    .setFootnote(meters + " meters away")); //+ "\n" + (String) jsonObj.get("address")));	
 	            }
 	        } catch (Exception e) {
 	            this.exception = e;
@@ -275,7 +277,7 @@ public final class CardsActivity extends Activity {
 			            	final HashMap<String, String> poiInformation = new HashMap<String, String>();
 							poiInformation.put(ATTR_ID, String.valueOf(i));
 							poiInformation.put(ATTR_NAME, new String(jsonObj.getString("name").getBytes("ISO-8859-1"), "UTF-8"));
-							poiInformation.put(ATTR_DESCRIPTION, "No info");
+							poiInformation.put(ATTR_DESCRIPTION, jsonObj.getDouble("distance") + "km away");
 							poiInformation.put(ATTR_LATITUDE, String.valueOf(jsonObj.get("x")));
 							poiInformation.put(ATTR_LONGITUDE, String.valueOf(jsonObj.get("y")));
 							final float UNKNOWN_ALTITUDE = -32768f;  // equals "AR.CONST.UNKNOWN_ALTITUDE" in JavaScript (compare AR.GeoLocation specification)
@@ -320,8 +322,12 @@ public final class CardsActivity extends Activity {
 						cards.get(0).setText("Side-scroll to browse the results, tap to view them in AR");
 					}
 			        mCardScroller.getAdapter().notifyDataSetChanged();
-			        ctx.unregisterReceiver(myBroadcastReceiver);
-					
+		            try {
+		                ctx.unregisterReceiver(myBroadcastReceiver);
+		            } catch (IllegalArgumentException e) {
+		                // Do nothing
+		            }
+			        isReceiverRegistered = false;
 				}
                
            };

@@ -68,6 +68,7 @@ var World = {
 	updateDistanceToUserValues: function updateDistanceToUserValuesFn() {
 		for (var i = 0; i < World.markerList.length; i++) {
 			World.markerList[i].distanceToUser = World.markerList[i].markerObject.locations[0].distanceToUser();
+			World.markerList[i].description = World.markerList[i].distanceToUser + " km";
 		}
 	},
 
